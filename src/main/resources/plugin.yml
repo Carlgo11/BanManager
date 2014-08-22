@@ -1,0 +1,10 @@
+main: com.carlgo11.ban.Main
+name: Ban
+version: 0.1
+author: Carlgo11
+commands:
+  ban:
+    description: Ban players
+    aliases: [bban, cban]
+  unban:
+    description: Unban players
