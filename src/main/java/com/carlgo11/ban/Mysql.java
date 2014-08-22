@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 public class Mysql {
 
-    public static String url = "jdbc:mysql://localhost:3306/ban";
+    public static String url = "ban";
     public static String username = "Ban";
     public static String password = "H84VAp3BzBXhWxRR";
 

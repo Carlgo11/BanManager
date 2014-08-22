@@ -15,31 +15,34 @@ public class BanCommand implements CommandExecutor {
      //ban Carlgo11 1 d Griefing very much
      cmd user     time amount amount Reason
      */
+    
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
     {
         if (args.length == 0) {
-            help(sender, cmd, commandLabel, args);
+            return false;
         } else if (args.length == 1) {
-
+            this.ban(sender, cmd, commandLabel, args, "1", "d");
         } else if (args.length > 2) {
-            //if (Mysql.ifPlayerBanned(Bukkit.getOfflinePlayer(args[0]).getUniqueId().toString())) {
-                int am = Integer.parseInt(args[1]);
+            this.ban(sender, cmd, commandLabel, args, args[1], args[2]);
+        }
+        return true;
+    }
+    
+    void ban(CommandSender sender, Command cmd, String commandLabel, String[] args, String time, String timeamount){
+        //if (Mysql.ifPlayerBanned(Bukkit.getOfflinePlayer(args[0]).getUniqueId().toString())) {
                 int t = Integer.parseInt(args[1]);
 
 
                 /* String User, String UUID, String Reason, int time, String banner */
-                if (Mysql.addBan(args[0].toString(), Bukkit.getPlayer(args[0]).getUniqueId().toString(), reason(args), Main.time(args[2], t), args[2], sender.getName().toString())) {
+                if (Mysql.addBan(args[0].toString(), Bukkit.getPlayer(args[0]).getUniqueId().toString(), reason(args), Main.time(timeamount, t), timeamount, sender.getName().toString())) {
                     sender.sendMessage(ChatColor.GREEN + args[0] + " banned for " + t + args[2]);
                 } else {
                     sender.sendMessage(ChatColor.RED + "Error banning the user. Please inform a server owner!");
                 }
-
            /* } else {
                 sender.sendMessage("already banned");
             }*/
-        }
-        return true;
     }
 
     void help(CommandSender sender, Command cmd, String commandLabel, String[] args)
@@ -60,5 +63,4 @@ public class BanCommand implements CommandExecutor {
         }
         return "You have been banned from the PortalCraft.Se Servers.";
     }
-
 }

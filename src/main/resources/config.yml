@@ -1,0 +1,8 @@
+# Config for banmanager (or what ever I'll call it)
+
+mysql:
+  url: "jdbc:mysql://localhost:3306/"
+  username: "ban"
+  password: "" 
+  database: "ban"
+  table: ""
