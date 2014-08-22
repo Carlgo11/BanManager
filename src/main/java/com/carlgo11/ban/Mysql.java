@@ -2,30 +2,45 @@ package com.carlgo11.ban;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Mysql {
 
-    public static String url = "ban";
+    public static String url = "jdbc:mysql://localhost:3306/";
     public static String username = "Ban";
     public static String password = "H84VAp3BzBXhWxRR";
+    public static String database = "ban";
+    public static String table = "bans";
 
     public static boolean addBan(String User, String UUID, String Reason, int time, String format, String banner)
     {
         Connection con = null;
-        Statement st = null;
 
         try {
-            con = DriverManager.getConnection(Mysql.url, Mysql.username, Mysql.password);
-            st = con.createStatement();
+            con = DriverManager.getConnection(Mysql.url + Mysql.database, Mysql.username, Mysql.password);
+
             if (!ifPlayerBanned(UUID)) { // Insert new ban
-                st.execute("INSERT INTO `ban`.`bans` (`name`, `UUID`, `reason`, `time`, `timeformat`, `banner`) VALUES ('" + User + "', '" + UUID + "', '" + Reason + "', '" + time + "', '" + format + "', '" + banner + "');");
+                
+                PreparedStatement ps = con.prepareStatement("INSERT INTO `ban`.`bans` (`name`, `UUID`, `reason`, `time`, `timeformat`, `banner`) VALUES (?, ?, ?, ?, ?, ?)");
+                ps.setString(1, User);
+                ps.setString(2, UUID);
+                ps.setString(3, Reason);
+                ps.setInt(4, time);
+                ps.setString(5, format);
+                ps.setString(6, banner);
+                ps.execute();
             } else { // Update existing ban
-                st.execute("UPDATE `ban`.`bans` SET `reason` = '" + Reason + "', `time` = '" + time + "', `timeformat` = '" + format + "' `banner` = '" + banner + "' WHERE `bans`.`UUID` = '" + UUID + "';");
+                PreparedStatement ps = con.prepareStatement("UPDATE " + Mysql.table + " SET `reason` = ?, `time` = ?, `timeformat` = ?, `banner` = ? WHERE `bans`.`UUID` = ?;");
+                ps.setString(1, Reason);
+                ps.setInt(2, time);
+                ps.setString(3, format);
+                ps.setString(4, banner);
+                ps.setString(5, UUID);
+
             }
 
         } catch (SQLException ex) {
@@ -34,9 +49,6 @@ public class Mysql {
 
         } finally {
             try {
-                if (st != null) {
-                    st.close();
-                }
                 if (con != null) {
                     con.close();
                 }
@@ -51,12 +63,13 @@ public class Mysql {
     public static void delBan(String UUID)
     {
         Connection con = null;
-        Statement st = null;
 
         try {
-            con = DriverManager.getConnection(Mysql.url, Mysql.username, Mysql.password);
-            st = con.createStatement();
-            st.execute("DELETE FROM `bans` WHERE `UUID` = '" + UUID + "'");
+            con = DriverManager.getConnection(Mysql.url + Mysql.database, Mysql.username, Mysql.password);
+
+            PreparedStatement ps = con.prepareStatement("DELETE FROM " + Mysql.table + " WHERE `UUID` = ?");
+            ps.setString(1, UUID);
+            ps.execute();
 
         } catch (SQLException ex) {
             Logger lgr = Logger.getLogger(Mysql.class.getName());
@@ -64,9 +77,6 @@ public class Mysql {
 
         } finally {
             try {
-                if (st != null) {
-                    st.close();
-                }
                 if (con != null) {
                     con.close();
                 }
@@ -80,13 +90,13 @@ public class Mysql {
     public static boolean ifPlayerBanned(String UUID)
     {
         Connection con = null;
-        Statement st = null;
         ResultSet rs = null;
 
         try {
-            con = DriverManager.getConnection(Mysql.url, Mysql.username, Mysql.password);
-            st = con.createStatement();
-            rs = st.executeQuery("SELECT * from bans where `UUID`='" + UUID + "'");
+            con = DriverManager.getConnection(Mysql.url + Mysql.database, Mysql.username, Mysql.password);
+            PreparedStatement ps = con.prepareStatement("SELECT * from " + Mysql.table + " where `UUID` = ? ");
+            ps.setString(1, UUID);
+            rs = ps.executeQuery();
 
             if (rs.next()) {
                 int r = Main.time(rs.getString(5), realtime(rs.getString(5), rs.getInt(4)));
@@ -110,9 +120,6 @@ public class Mysql {
             try {
                 if (rs != null) {
                     rs.close();
-                }
-                if (st != null) {
-                    st.close();
                 }
                 if (con != null) {
                     con.close();
@@ -144,13 +151,13 @@ public class Mysql {
     public static String getString(String UUID, int var)
     {
         Connection con = null;
-        Statement st = null;
         ResultSet rs = null;
 
         try {
-            con = DriverManager.getConnection(Mysql.url, Mysql.username, Mysql.password);
-            st = con.createStatement();
-            rs = st.executeQuery("SELECT * from bans where `UUID`='" + UUID + "'");
+            con = DriverManager.getConnection(Mysql.url + Mysql.database, Mysql.username, Mysql.password);
+            PreparedStatement ps = con.prepareStatement("SELECT * from " + Mysql.table + " where `UUID` = ?");
+            ps.setString(1, UUID);
+            rs = ps.executeQuery();
             while (true) {
                 if (rs.next()) {
                     return rs.getString(var);
@@ -168,13 +175,9 @@ public class Mysql {
                 if (rs != null) {
                     rs.close();
                 }
-                if (st != null) {
-                    st.close();
-                }
                 if (con != null) {
                     con.close();
                 }
-
             } catch (SQLException ex) {
                 Logger lgr = Logger.getLogger(Mysql.class.getName());
                 lgr.log(Level.WARNING, ex.getMessage(), ex);

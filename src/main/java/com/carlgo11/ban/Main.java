@@ -29,7 +29,6 @@ public class Main extends JavaPlugin {
         } else if (m.equalsIgnoreCase("s")) {
             outp = time + amount;
         }
-
         return outp;
     }
 

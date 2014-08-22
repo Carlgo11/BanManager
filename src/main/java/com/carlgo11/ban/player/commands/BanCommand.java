@@ -10,12 +10,6 @@ import org.bukkit.command.CommandSender;
 
 public class BanCommand implements CommandExecutor {
 
-    /*
-     args: 0        1 2 3...
-     //ban Carlgo11 1 d Griefing very much
-     cmd user     time amount amount Reason
-     */
-    
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
     {
@@ -28,21 +22,20 @@ public class BanCommand implements CommandExecutor {
         }
         return true;
     }
-    
-    void ban(CommandSender sender, Command cmd, String commandLabel, String[] args, String time, String timeamount){
+
+    void ban(CommandSender sender, Command cmd, String commandLabel, String[] args, String time, String timeamount)
+    {
         //if (Mysql.ifPlayerBanned(Bukkit.getOfflinePlayer(args[0]).getUniqueId().toString())) {
-                int t = Integer.parseInt(args[1]);
+            int t = Integer.parseInt(args[1]);
 
-
-                /* String User, String UUID, String Reason, int time, String banner */
-                if (Mysql.addBan(args[0].toString(), Bukkit.getPlayer(args[0]).getUniqueId().toString(), reason(args), Main.time(timeamount, t), timeamount, sender.getName().toString())) {
-                    sender.sendMessage(ChatColor.GREEN + args[0] + " banned for " + t + args[2]);
-                } else {
-                    sender.sendMessage(ChatColor.RED + "Error banning the user. Please inform a server owner!");
-                }
-           /* } else {
-                sender.sendMessage("already banned");
-            }*/
+            if (Mysql.addBan(args[0].toString(), Bukkit.getPlayer(args[0]).getUniqueId().toString(), reason(args), Main.time(timeamount, t), timeamount, sender.getName().toString())) {
+                sender.sendMessage(ChatColor.GREEN + args[0] + " banned for " + t + args[2]);
+            } else {
+                sender.sendMessage(ChatColor.RED + "Error banning the user. Please inform a server owner!");
+            }
+       /* } else {
+            sender.sendMessage("already banned");
+        }*/
     }
 
     void help(CommandSender sender, Command cmd, String commandLabel, String[] args)

@@ -7,7 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 public class UnbanCommand implements CommandExecutor {
-    
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
     {
@@ -19,11 +19,11 @@ public class UnbanCommand implements CommandExecutor {
         
         return true;
     }
-    
+
     void help(CommandSender sender, Command cmd, String commandLabel, String[] args){
         
     }
-    
+
     void unban(CommandSender sender, Command cmd, String commandLabel, String[] args){
         if(sender.hasPermission("ban.unban")){
             Mysql.delBan(Bukkit.getOfflinePlayer(args[0]).getUniqueId().toString());
