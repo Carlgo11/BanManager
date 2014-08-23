@@ -10,11 +10,11 @@ import java.util.logging.Logger;
 
 public class Mysql {
 
-    public static String url = "jdbc:mysql://localhost:3306/";
-    public static String username = "Ban";
-    public static String password = "H84VAp3BzBXhWxRR";
-    public static String database = "ban";
-    public static String table = "bans";
+    public static String url;
+    public static String username;
+    public static String password;
+    public static String database;
+    public static String table;
 
     public static boolean addBan(String User, String UUID, String Reason, int time, String format, String banner)
     {
@@ -24,7 +24,7 @@ public class Mysql {
             con = DriverManager.getConnection(Mysql.url + Mysql.database, Mysql.username, Mysql.password);
 
             if (!ifPlayerBanned(UUID)) { // Insert new ban
-                
+
                 PreparedStatement ps = con.prepareStatement("INSERT INTO `ban`.`bans` (`name`, `UUID`, `reason`, `time`, `timeformat`, `banner`) VALUES (?, ?, ?, ?, ?, ?)");
                 ps.setString(1, User);
                 ps.setString(2, UUID);
@@ -98,18 +98,16 @@ public class Mysql {
             ps.setString(1, UUID);
             rs = ps.executeQuery();
 
-            if (rs.next()) {
-                int r = Main.time(rs.getString(5), realtime(rs.getString(5), rs.getInt(4)));
-                System.out.println(r + "\t" + rs.getInt(4));
-                if (r < rs.getInt(4)) {
-                    System.out.println("true");
-                    return true;
+            while (true) {
+                if (rs.next()) {
+                    int r = Main.time(rs.getString(5), realtime(rs.getString(5), rs.getInt(4)));
+                    System.out.println(r + "\t" + rs.getInt(4));
+                    if (r < rs.getInt(4)) {
+                        return true;
+                    }
                 } else {
-                    System.out.println("false");
-                    return false;
+                    break;
                 }
-            } else {
-                return false;
             }
 
         } catch (SQLException ex) {
@@ -134,7 +132,6 @@ public class Mysql {
 
     static int realtime(String m, int amount)
     {
-        System.out.println(m);
         int outp = -1;
         int time = (int) (System.currentTimeMillis() / 1000);
         if (m.equalsIgnoreCase("h")) {

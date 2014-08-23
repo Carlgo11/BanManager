@@ -2,6 +2,7 @@ package com.carlgo11.ban.player;
 
 import com.carlgo11.ban.Main;
 import com.carlgo11.ban.Mysql;
+import java.text.MessageFormat;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,8 +22,7 @@ public class JoinEvent implements Listener {
     public void onJoin(PlayerLoginEvent e){
         Player p = e.getPlayer();
         if(isValid(p.getUniqueId().toString())){
-            System.out.println("vaild true");
-            e.disallow(PlayerLoginEvent.Result.KICK_BANNED, "Banned by :"+ChatColor.GREEN+Mysql.getString(p.getUniqueId().toString(), 6)+"\n  " + "    "+ChatColor.GREEN+"n\""+Mysql.getString(p.getUniqueId().toString(), 3)+"\"");
+            e.disallow(PlayerLoginEvent.Result.KICK_BANNED, MessageFormat.format("Banned by: {0}{1} \n     {2} \n\"{3}\"", ChatColor.GREEN, Mysql.getString(p.getUniqueId().toString(), 6), ChatColor.YELLOW, Mysql.getString(p.getUniqueId().toString(), 3)));
         }else{
             e.allow();
         }

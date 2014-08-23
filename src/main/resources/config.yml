@@ -2,7 +2,12 @@
 
 mysql:
   url: "jdbc:mysql://localhost:3306/"
-  username: "ban"
-  password: "" 
+  username: "Ban"
+  password: "H84VAp3BzBXhWxRR" 
   database: "ban"
-  table: ""
+  table: "bans"
+
+settings:
+  default-reason: "You have been banned from the PortalCraft.Se Servers."
+  default-time: "1"
+  default-timeformat: "d"
