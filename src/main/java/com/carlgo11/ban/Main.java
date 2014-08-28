@@ -27,10 +27,12 @@ public class Main extends JavaPlugin {
     {
         int outp = -1;
         int time = (int) (System.currentTimeMillis() / 1000);
-        if (m.equalsIgnoreCase("h")) {
-            outp = time + amount * 3600;
-        } else if (m.equalsIgnoreCase("d")) {
+        if (m.equalsIgnoreCase("d")) {
             outp = time + (24 * amount) * 3600;
+        } else if (m.equalsIgnoreCase("h")) {
+            outp = time + amount * 3600;
+        } else if (m.equalsIgnoreCase("m")) {
+            outp = time + (60 * amount);
         } else if (m.equalsIgnoreCase("s")) {
             outp = time + amount;
         }
@@ -60,5 +62,5 @@ public class Main extends JavaPlugin {
     {
 
     }
-    
+
 }
