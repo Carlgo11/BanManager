@@ -1,5 +1,5 @@
 main: com.carlgo11.ban.Main
-name: Ban
+name: BanManager
 version: 0.1
 author: Carlgo11
 commands:

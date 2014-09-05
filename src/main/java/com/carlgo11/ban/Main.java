@@ -14,6 +14,7 @@ public class Main extends JavaPlugin {
 
     public void onEnable()
     {
+        checkConfig();
         getServer().getPluginManager().registerEvents(new JoinEvent(this), this);
         commands();
         setupMysql();
@@ -78,7 +79,7 @@ public class Main extends JavaPlugin {
     }
     
     public void sendMessage(CommandSender sender, String message){
-        sender.sendMessage(ChatColor.YELLOW+"["+this.getDescription().getName()+"]"+ChatColor.RESET+message);
+        sender.sendMessage(ChatColor.YELLOW+"["+this.getDescription().getName()+"] "+ChatColor.RESET+message);
     }
     
     public void error(CommandSender sender, String message){
