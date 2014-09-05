@@ -44,18 +44,13 @@ public class BanCommand implements CommandExecutor {
         Player p = Bukkit.getPlayer(args[0]);
         if (Mysql.addBan(args[0].toString(), Bukkit.getPlayer(args[0]).getUniqueId().toString(), reason(args), Main.time(timeamount, t), timeamount, sender.getName().toString())) {
             Bukkit.getPlayer(args[0]).kickPlayer(MessageFormat.format("Banned by: {0}{1} \n     {2} \n\"{3}\"", ChatColor.GREEN, Mysql.getString(p.getUniqueId().toString(), 6), ChatColor.YELLOW, Mysql.getString(p.getUniqueId().toString(), 3)));
-            sender.sendMessage(ChatColor.GREEN + args[0] + " banned for " + t + " " + args[2]);
+            Main.broadcastMessage(ChatColor.GREEN + args[0] + " banned for " + t + " " + args[2]);
         } else {
-            sender.sendMessage(ChatColor.RED + "Error banning the user. Please inform a server owner!");
+            Main.error(sender, "Error banning the user. Please inform a server owner!");
         }
         /* } else {
          sender.sendMessage("already banned");
          }*/
-    }
-
-    void help(CommandSender sender, Command cmd, String commandLabel, String[] args)
-    {
-        sender.sendMessage("nope");
     }
 
     String reason(String[] args)

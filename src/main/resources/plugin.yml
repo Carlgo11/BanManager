@@ -6,5 +6,6 @@ commands:
   ban:
     description: Ban players
     aliases: [bban, cban]
+    usage: /<command> [user] (time) (s|m|h|d) (reason)
   unban:
     description: Unban players

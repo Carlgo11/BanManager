@@ -3,6 +3,8 @@ package com.carlgo11.ban;
 import com.carlgo11.ban.player.*;
 import com.carlgo11.ban.player.commands.BanCommand;
 import com.carlgo11.ban.player.commands.UnbanCommand;
+import java.io.File;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -20,7 +22,7 @@ public class Main extends JavaPlugin {
     public void commands()
     {
         getCommand("ban").setExecutor(new BanCommand(this));
-        getCommand("unban").setExecutor(new UnbanCommand());
+        getCommand("unban").setExecutor(new UnbanCommand(this));
     }
 
     public static int time(String m, int amount)
@@ -58,9 +60,29 @@ public class Main extends JavaPlugin {
         p.sendMessage(ChatColor.RED + "[Error] You don't have permission to perform that action.");
     }
 
-    public static void broadcastMessage(String message, String permission)
+    public void broadcastMessage(String message)
     {
+        Bukkit.broadcastMessage(message);
+    }
+    
+    public void checkConfig()
+    {
+        File config = new File(getDataFolder(), "config.yml");
+        if (!config.exists()) {
+            
+            saveDefaultConfig();
+            getConfig().options().copyHeader(true);
 
+            System.out.println("["+getDescription().getName()+"] No config.yml detected, config.yml created");
+        }
+    }
+    
+    public void sendMessage(CommandSender sender, String message){
+        sender.sendMessage(ChatColor.YELLOW+"["+this.getDescription().getName()+"]"+ChatColor.RESET+message);
+    }
+    
+    public void error(CommandSender sender, String message){
+        sendMessage(sender, ChatColor.RED+"[Error] "+message);
     }
 
 }
