@@ -6,6 +6,7 @@ import java.text.MessageFormat;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 
@@ -18,7 +19,7 @@ public class JoinEvent implements Listener {
         this.plugin = plug;
     }
     
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST) 
     public void onJoin(PlayerLoginEvent e){
         Player p = e.getPlayer();
         if(isValid(p.getUniqueId().toString())){

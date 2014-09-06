@@ -25,13 +25,14 @@ public class Mysql {
 
             if (!ifPlayerBanned(UUID)) { // Insert new ban
 
-                PreparedStatement ps = con.prepareStatement("INSERT INTO `ban`.`bans` (`name`, `UUID`, `reason`, `time`, `timeformat`, `banner`) VALUES (?, ?, ?, ?, ?, ?)");
+                PreparedStatement ps = con.prepareStatement("INSERT INTO `"+Mysql.database+"`.`"+Mysql.table+"` (`name`, `UUID`, `reason`, `time`, `timeformat`, `banner`) VALUES (?, ?, ?, ?, ?, ?)");
                 ps.setString(1, User);
                 ps.setString(2, UUID);
                 ps.setString(3, Reason);
                 ps.setInt(4, time);
                 ps.setString(5, format);
                 ps.setString(6, banner);
+                System.out.println(ps.toString());
                 ps.execute();
             } else { // Update existing ban
                 PreparedStatement ps = con.prepareStatement("UPDATE " + Mysql.table + " SET `reason` = ?, `time` = ?, `timeformat` = ?, `banner` = ? WHERE `bans`.`UUID` = ?;");
@@ -104,6 +105,8 @@ public class Mysql {
                     System.out.println(r + "\t" + rs.getInt(4));
                     if (r < rs.getInt(4)) {
                         return true;
+                    }else{
+                        delBan(UUID);
                     }
                 } else {
                     break;
