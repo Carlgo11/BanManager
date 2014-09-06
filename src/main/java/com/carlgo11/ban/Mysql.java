@@ -23,19 +23,18 @@ public class Mysql {
         try {
             con = DriverManager.getConnection(Mysql.url + Mysql.database, Mysql.username, Mysql.password);
 
-            if (!ifPlayerBanned(UUID)) { // Insert new ban
+            if (!ifPlayerBanned(UUID)) {
 
-                PreparedStatement ps = con.prepareStatement("INSERT INTO `"+Mysql.database+"`.`"+Mysql.table+"` (`name`, `UUID`, `reason`, `time`, `timeformat`, `banner`) VALUES (?, ?, ?, ?, ?, ?)");
+                PreparedStatement ps = con.prepareStatement("INSERT INTO `" + Mysql.table + "` (`name`, `UUID`, `reason`, `time`, `timeformat`, `banner`) VALUES (?, ?, ?, ?, ?, ?)");
                 ps.setString(1, User);
                 ps.setString(2, UUID);
                 ps.setString(3, Reason);
                 ps.setInt(4, time);
                 ps.setString(5, format);
                 ps.setString(6, banner);
-                System.out.println(ps.toString());
                 ps.execute();
-            } else { // Update existing ban
-                PreparedStatement ps = con.prepareStatement("UPDATE " + Mysql.table + " SET `reason` = ?, `time` = ?, `timeformat` = ?, `banner` = ? WHERE `bans`.`UUID` = ?;");
+            } else {
+                PreparedStatement ps = con.prepareStatement("UPDATE `" + Mysql.table + "` SET `reason` = ?, `time` = ?, `timeformat` = ?, `banner` = ? WHERE `UUID` = ?;");
                 ps.setString(1, Reason);
                 ps.setInt(2, time);
                 ps.setString(3, format);
@@ -68,7 +67,7 @@ public class Mysql {
         try {
             con = DriverManager.getConnection(Mysql.url + Mysql.database, Mysql.username, Mysql.password);
 
-            PreparedStatement ps = con.prepareStatement("DELETE FROM " + Mysql.table + " WHERE `UUID` = ?");
+            PreparedStatement ps = con.prepareStatement("DELETE FROM `" + Mysql.table + "` WHERE `UUID` = ?");
             ps.setString(1, UUID);
             ps.execute();
 
@@ -95,17 +94,16 @@ public class Mysql {
 
         try {
             con = DriverManager.getConnection(Mysql.url + Mysql.database, Mysql.username, Mysql.password);
-            PreparedStatement ps = con.prepareStatement("SELECT * from " + Mysql.table + " where `UUID` = ? ");
+            PreparedStatement ps = con.prepareStatement("SELECT * from `" + Mysql.table + "` where `UUID` = ? ");
             ps.setString(1, UUID);
             rs = ps.executeQuery();
 
             while (true) {
                 if (rs.next()) {
                     int r = Main.time(rs.getString(5), realtime(rs.getString(5), rs.getInt(4)));
-                    System.out.println(r + "\t" + rs.getInt(4));
                     if (r < rs.getInt(4)) {
                         return true;
-                    }else{
+                    } else {
                         delBan(UUID);
                     }
                 } else {
@@ -116,7 +114,6 @@ public class Mysql {
         } catch (SQLException ex) {
             Logger lgr = Logger.getLogger(Mysql.class.getName());
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
-
         } finally {
             try {
                 if (rs != null) {
@@ -155,7 +152,7 @@ public class Mysql {
 
         try {
             con = DriverManager.getConnection(Mysql.url + Mysql.database, Mysql.username, Mysql.password);
-            PreparedStatement ps = con.prepareStatement("SELECT * from " + Mysql.table + " where `UUID` = ?");
+            PreparedStatement ps = con.prepareStatement("SELECT * from `" + Mysql.table + "` where `UUID` = ?");
             ps.setString(1, UUID);
             rs = ps.executeQuery();
             while (true) {
